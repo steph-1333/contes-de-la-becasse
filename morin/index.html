@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit Ce cochon de Morin</title>
+<style>
+  :root {
+    --bg: #fbf8f1; --card: #ffffff; --ink: #1f2328; --muted: #5b6168; --line: #e3ddd0;
+    --accent: #2f5d8a; --accent-soft: #e8f0f8; --ok: #2e7d4f; --warn-bg: #fff4e0; --warn: #8a5a00;
+    --morin: #c2417a; --labarbe: #2f5d8a; --henriette: #2e7d4f; --rivet: #c46a12;
+    --oncle: #7a5a3a; --mme: #6b4fa0; --narr: #5b6168; --notaire: #19808a;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: Arial, Helvetica, sans-serif; font-size: 19px; line-height: 1.7;
+    letter-spacing: .03em; word-spacing: .12em;
+  }
+  main { max-width: 820px; margin: 0 auto; padding: 0 16px 80px; }
+  header.top { padding: 28px 0 8px; }
+  h1 { font-size: 1.7rem; line-height: 1.25; margin: 0 0 4px; }
+  h2 { font-size: 1.35rem; line-height: 1.3; margin: 0 0 12px; }
+  h3 { font-size: 1.1rem; margin: 22px 0 8px; }
+  p { margin: 0 0 12px; }
+  .sub { color: var(--muted); margin: 0; }
+  nav.chips { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0; display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 8px; border-bottom: 1px solid var(--line); }
+  nav.chips a { text-decoration: none; color: var(--accent); background: var(--accent-soft); padding: 6px 12px; border-radius: 999px; font-size: .85rem; white-space: nowrap; }
+  section.fiche { scroll-margin-top: 64px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px 22px 14px; margin: 22px 0; }
+  .tag { display: inline-block; font-size: .75rem; font-weight: bold; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .note { background: var(--warn-bg); color: #4a3500; border-radius: 10px; padding: 12px 14px; margin: 12px 0; font-size: .92rem; }
+  .why { color: var(--muted); font-size: .85rem; border-left: 3px solid var(--line); padding-left: 10px; margin: 8px 0 14px; }
+  details.parent > summary { cursor: pointer; font-weight: bold; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: .92rem; margin: 8px 0 14px; }
+  th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; text-align: left; }
+  th { background: #f4f0e6; }
+  .tablewrap { overflow-x: auto; }
+
+  /* personnages */
+  .p { font-weight: bold; }
+  .p.morin { color: var(--morin); } .p.labarbe { color: var(--labarbe); } .p.henriette { color: var(--henriette); }
+  .p.rivet { color: var(--rivet); } .p.oncle { color: var(--oncle); } .p.mme { color: var(--mme); }
+  .p.narr { color: var(--narr); } .p.notaire { color: var(--notaire); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+  .card { border: 1px solid var(--line); border-left: 6px solid var(--c, var(--line)); border-radius: 10px; padding: 10px 12px; font-size: .9rem; line-height: 1.55; }
+  .card b { display: block; font-size: 1.02rem; color: var(--c); }
+
+  /* qui raconte */
+  .nest { border: 2px dashed var(--narr); border-radius: 12px; padding: 10px 12px; }
+  .nest > .lbl, .nest2 > .lbl { font-size: .85rem; color: var(--muted); }
+  .nest2 { border: 2px solid var(--labarbe); border-radius: 12px; padding: 10px 12px; margin-top: 8px; background: var(--accent-soft); }
+
+  /* mots */
+  .mots { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+  .mot { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .9rem; line-height: 1.55; }
+  .mot .w { font-size: 1.1rem; font-weight: bold; }
+  .mot .s { color: var(--muted); }
+  .mot .ex { color: var(--muted); font-size: .85rem; margin-top: 4px; }
+
+  /* audio */
+  .player { border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin: 10px 0 16px; background: #fdfcf9; }
+  .player .ttl { font-weight: bold; margin-bottom: 6px; }
+  .player audio { width: 100%; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; align-items: center; }
+  button { font: inherit; font-size: .85rem; letter-spacing: .02em; cursor: pointer; border: 1px solid var(--accent); color: var(--accent); background: #fff; border-radius: 999px; padding: 6px 14px; min-height: 40px; }
+  button.on, button:hover { background: var(--accent); color: #fff; }
+  .small { font-size: .8rem; color: var(--muted); }
+
+  /* parties */
+  .partie { border-top: 2px solid var(--line); padding-top: 14px; margin-top: 18px; }
+  .mission { background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; margin: 8px 0 12px; }
+  .reveal { display: none; margin-top: 10px; }
+  .reveal.show { display: block; }
+  ol.res { padding-left: 1.4em; margin: 0; }
+  ol.res li { margin-bottom: 6px; }
+
+  /* questions */
+  .q { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 8px 0; }
+  .q .a { display: none; margin-top: 6px; color: var(--ok); font-size: .95rem; }
+  .q.show .a { display: block; }
+  .q button { margin-top: 6px; }
+  body.allans .q .a, body.allans .reveal { display: block; }
+  .check { display: flex; align-items: center; gap: 8px; font-size: .9rem; margin: 6px 0 2px; }
+  .check input { width: 22px; height: 22px; }
+  #flash { min-height: 3.5em; font-size: 1.15rem; font-weight: bold; margin: 8px 0; }
+
+  /* schéma */
+  .schema { display: grid; gap: 8px; }
+  .step { border-radius: 10px; padding: 10px 12px; border: 1px solid var(--line); }
+  .step b { display: block; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+  .arrow { text-align: center; color: var(--muted); line-height: 1; }
+  .frise { list-style: none; padding: 0; margin: 0; border-left: 4px solid var(--accent); }
+  .frise li { position: relative; padding: 0 0 12px 18px; }
+  .frise li::before { content: ""; position: absolute; left: -10px; top: 8px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 3px solid var(--card); }
+  .frise .d { font-weight: bold; }
+
+  @media (max-width: 520px) {
+    body { font-size: 18px; }
+    section.fiche { padding: 16px 14px 10px; }
+  }
+  @media print {
+    body { background: #fff; font-size: 13pt; }
+    nav.chips, .player, button, .noprint { display: none !important; }
+    section.fiche { break-before: page; border: none; padding: 0; }
+    section.fiche:first-of-type { break-before: auto; }
+    .q, .card, .mot, .step { break-inside: avoid; }
+    .reveal { display: block !important; }
+    details.parent > summary { display: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+<p class="noprint" style="margin:0 0 12px"><a href="../">← Retour au kit de tout le livre (la case « Aujourd'hui »)</a></p>
+
+<header class="top">
+  <h1>Ce cochon de Morin</h1>
+  <p class="sub">Guy de Maupassant, « Contes de la bécasse » (1883). Le kit de lecture d'Ethan.</p>
+</header>
+
+<nav class="chips" aria-label="Fiches">
+  <a href="#parent">Parent</a>
+  <a href="#avant">1. Avant de lire</a>
+  <a href="#lire">2. Lire en écoutant</a>
+  <a href="#schema">3. Le schéma</a>
+  <a href="#comprendre">4. Comprendre</a>
+  <a href="#reviser">5. Se tester</a>
+  <a href="#raconter">6. Raconter</a>
+</nav>
+
+<!-- ============ PARENT ============ -->
+<section class="fiche" id="parent">
+  <span class="tag">Pour le parent</span>
+  <h2>Le plan en 7 séances courtes</h2>
+  <details class="parent" open>
+    <summary>Comment utiliser ce kit (2 minutes de lecture)</summary>
+    <div class="tablewrap">
+    <table>
+      <tr><th>Quand</th><th>Quoi</th><th>Durée</th></tr>
+      <tr><td>Séance 1</td><td>Fiche 1 : écouter « l'histoire en 1 minute », découvrir les personnages, écouter et répéter les 12 mots.</td><td>20 min</td></tr>
+      <tr><td>Séance 2</td><td>Partie I : écouter en suivant le texte, puis la raconter en 3 phrases, puis vérifier et répondre aux 3 questions.</td><td>25 min</td></tr>
+      <tr><td>Séance 3</td><td>Partie II, même méthode. C'est la plus longue : on peut couper en deux.</td><td>30 min</td></tr>
+      <tr><td>Séance 4</td><td>Partie III, même méthode, puis la fiche 3 (schéma) et la fiche 4 (comprendre l'ironie).</td><td>35 min</td></tr>
+      <tr><td>2 jours après</td><td>Fiche 5, série « J+2 », sans regarder le texte.</td><td>10 min</td></tr>
+      <tr><td>7 jours après</td><td>Fiche 5, série « J+7 », puis raconter l'histoire (fiche 6).</td><td>15 min</td></tr>
+      <tr><td>Veille du contrôle</td><td>Raconter en 2 minutes, puis le bouton « question au hasard ».</td><td>15 min</td></tr>
+    </table>
+    </div>
+    <p><b>Les 4 règles :</b></p>
+    <ol>
+      <li><b>À l'oral d'abord.</b> Ethan répond en parlant. S'il faut écrire, c'est vous ou le clavier qui écrivez.</li>
+      <li><b>Chercher avant de regarder.</b> Il essaie de répondre de mémoire, même avec une réponse fausse. Ensuite seulement, on montre la réponse.</li>
+      <li><b>Vous montrez d'abord, il fait ensuite.</b> Pour la partie I, racontez vous-même en 3 phrases, à voix haute. Pour les parties II et III, c'est lui.</li>
+      <li><b>Court et espacé.</b> Mieux vaut 3 fois 10 minutes sur 10 jours qu'une heure la veille.</li>
+    </ol>
+    <div class="note"><b>À savoir avant de lire :</b> la nouvelle raconte sur un ton comique deux agressions. Morin embrasse de force une inconnue dans le train. Labarbe embrasse Henriette de force à plusieurs reprises, puis entre la nuit dans sa chambre (« elle se débattait »). C'est aussi la clé de la nouvelle (fiche 4) : Maupassant montre que Morin est puni et que Labarbe est remercié. Une question de la fiche 4 permet d'en parler simplement.</div>
+    <p class="small">Pour imprimer les fiches avec les réponses aux questions, cliquez d'abord sur le bouton ci-dessous. Les résumés s'impriment toujours.</p>
+    <div class="row noprint">
+      <button type="button" id="allAns">Afficher toutes les réponses (pour vous)</button>
+    </div>
+  </details>
+</section>
+
+<!-- ============ 1. AVANT DE LIRE ============ -->
+<section class="fiche" id="avant">
+  <span class="tag">Fiche 1</span>
+  <h2>Avant de lire</h2>
+
+  <h3>L'histoire en 1 minute</h3>
+  <div class="player">
+    <div class="ttl">Écouter (52 s)</div>
+    <audio controls preload="none" src="audio/0_histoire_en_1_minute.m4a"></audio>
+  </div>
+  <p><span class="p labarbe">Labarbe</span>, devenu député, raconte à un ami une vieille histoire. Vers 1862, <span class="p morin">Morin</span>, un marchand de La Rochelle, rentre de Paris en train de nuit. Au matin, il se jette sur une jeune femme pour l'embrasser. Elle crie. Il est arrêté.</p>
+  <p>Pour éviter le procès, <span class="p labarbe">Labarbe</span> et son collègue <span class="p rivet">Rivet</span> vont voir la famille de la jeune femme, <span class="p henriette">Henriette</span>. Là-bas, Labarbe embrasse Henriette de force, plusieurs fois, puis passe la nuit avec elle. La famille retire sa plainte.</p>
+  <p><span class="p morin">Morin</span> échappe au procès, mais tout le monde l'appelle « ce cochon de Morin », jusqu'à sa mort. <span class="p labarbe">Labarbe</span>, lui, sera remercié pour son « tact ».</p>
+  <div class="mission"><b>La question à garder en tête :</b> qui est le vrai cochon ?</div>
+
+  <h3>Qui raconte ?</h3>
+  <div class="nest">
+    <div class="lbl">Cadre : <span class="p narr">« je »</span>, un ami de La Rochelle, pose une question.</div>
+    <div class="nest2">
+      <div class="lbl">Dans le cadre : <span class="p labarbe">Labarbe</span> raconte l'histoire de Morin. C'est lui qui dit « je » pendant presque toute la nouvelle.</div>
+      <p style="margin:6px 0 0">Attention : on n'entend que <b>sa</b> version. Il se donne le beau rôle.</p>
+    </div>
+  </div>
+
+  <h3>Les personnages</h3>
+  <div class="cards">
+    <div class="card" style="--c: var(--morin)"><b>Morin</b>Mercier (marchand de fil et de boutons) à La Rochelle. Embrasse de force une jeune femme dans le train. Surnommé « ce cochon de Morin ».</div>
+    <div class="card" style="--c: var(--labarbe)"><b>Labarbe</b>Celui qui raconte. À l'époque, 30 ans, chef du journal « Le Fanal des Charentes », surnommé « le beau Labarbe ». Plus tard, député.</div>
+    <div class="card" style="--c: var(--henriette)"><b>Henriette Bonnel</b>La jeune femme du train, 19 ou 20 ans. N'a plus de parents. Vient d'avoir ses diplômes d'institutrice.</div>
+    <div class="card" style="--c: var(--rivet)"><b>Rivet</b>Collègue de Labarbe au journal. Petit, moqueur. Répète « l'affaire de ce cochon de Morin ».</div>
+    <div class="card" style="--c: var(--oncle)"><b>M. Tonnelet</b>L'oncle d'Henriette, à Mauzé. A porté plainte. Lit le journal de Labarbe et l'admire.</div>
+    <div class="card" style="--c: var(--mme)"><b>Mme Morin</b>La femme de Morin. Grande et dure, elle le bat et le traite de cochon.</div>
+    <div class="card" style="--c: var(--narr)"><b>« Je » (le narrateur du cadre)</b>Un ami de Labarbe, de La Rochelle. Il ne connaît pas l'histoire et la demande.</div>
+    <div class="card" style="--c: var(--notaire)"><b>Me Belloncle</b>Notaire à Tousserre. En 1875, c'est le mari d'Henriette.</div>
+  </div>
+  <p class="small" style="margin-top:8px">Aussi : la tante d'Henriette (absente jusqu'au dernier matin), le procureur (ami de Labarbe), un gendarme.</p>
+
+  <h3>Les lieux</h3>
+  <p><b>Paris</b> (gare d'Orléans) → train de nuit → <b>Mauzé</b> (arrestation, puis maison de l'oncle) → <b>La Rochelle</b> (magasin de Morin, journal, Café du commerce) → <b>Tousserre</b> (chez le notaire, en 1875).</p>
+
+  <h3>Les 12 mots à connaître</h3>
+  <div class="player">
+    <div class="ttl">Écouter, répéter à voix haute, puis écouter le sens (3 min)</div>
+    <audio controls preload="none" src="audio/1_les_12_mots.m4a"></audio>
+  </div>
+  <div class="mots">
+    <div class="mot"><div class="w">mercier</div><div class="s">mer · cier</div>Vend du fil, des boutons, des rubans.<div class="ex">Morin a un grand magasin de mercerie.</div></div>
+    <div class="mot"><div class="w">député</div><div class="s">dé · pu · té</div>Élu par les habitants pour voter les lois.<div class="ex">Labarbe est devenu député.</div></div>
+    <div class="mot"><div class="w">rédacteur en chef</div><div class="s">ré · dac · teur</div>Le chef d'un journal.<div class="ex">Labarbe dirige « Le Fanal des Charentes ».</div></div>
+    <div class="mot"><div class="w">abonné</div><div class="s">a · bo · nné</div>Paie pour recevoir le journal régulièrement.<div class="ex">L'oncle est abonné au Fanal.</div></div>
+    <div class="mot"><div class="w">porter / retirer plainte</div><div class="s">plain · te</div>Demander à la justice de punir quelqu'un / annuler cette demande.<div class="ex">La mission : faire retirer la plainte.</div></div>
+    <div class="mot"><div class="w">procureur</div><div class="s">pro · cu · reur</div>Le magistrat qui décide d'accuser devant le tribunal.<div class="ex">« Impérial » : la France a un empereur, Napoléon III.</div></div>
+    <div class="mot"><div class="w">outrage aux bonnes mœurs</div><div class="s">mœurs : « meurss » ou « meur »</div>Délit : comportement sexuel choquant, ici en public.<div class="ex">C'est l'accusation contre Morin.</div></div>
+    <div class="mot"><div class="w">institutrice</div><div class="s">ins · ti · tu · trice</div>Maîtresse d'école.<div class="ex">Henriette a ses « brevets d'institutrice ».</div></div>
+    <div class="mot"><div class="w">dépêche</div><div class="s">dé · pêche</div>Message court par télégraphe, l'ancêtre du SMS.<div class="ex">La tante annonce son retour.</div></div>
+    <div class="mot"><div class="w">notaire</div><div class="s">no · taire</div>Homme de loi : maison, mariage, héritage.<div class="ex">Henriette épouse le notaire Belloncle.</div></div>
+    <div class="mot"><div class="w">épithète</div><div class="s">é · pi · thète</div>Ici : un surnom collé à quelqu'un.<div class="ex">« Cochon » colle à Morin jusqu'à sa mort.</div></div>
+    <div class="mot"><div class="w">tact</div><div class="s">tact</div>Délicatesse : agir sans blesser.<div class="ex">On remercie Labarbe pour son « tact »… (ironie)</div></div>
+  </div>
+</section>
+
+<!-- ============ 2. LIRE EN ÉCOUTANT ============ -->
+<section class="fiche" id="lire">
+  <span class="tag">Fiche 2</span>
+  <h2>Lire en écoutant, partie par partie</h2>
+  <p>Ethan écoute <b>en suivant le texte</b> dans le livre. À la fin de chaque partie : stop. Il raconte en 3 phrases, puis on vérifie.</p>
+
+  <div class="player">
+    <div class="ttl">Voix humaine : Didier (LibriVox, gratuit, 27 min en tout)</div>
+    <audio id="human" controls preload="none" src="https://www.archive.org/download/les_contes_de_la_becasse_0809_librivox/lescontesdelabecasse_02_maupassant_64kb.mp3"></audio>
+    <div class="row">
+      <button type="button" data-seek="0">Début</button>
+      <button type="button" data-seek="390">Partie II (vers 6 min 30)</button>
+      <button type="button" data-seek="1085">Partie III (vers 18 min)</button>
+    </div>
+    <p class="small" style="margin:6px 0 0">Il faut Internet. Les débuts des parties II et III sont estimés : reculez un peu si besoin.</p>
+  </div>
+  <p class="small noprint">Sans Internet, ou pour changer : la voix de synthèse ci-dessous, une piste par partie.</p>
+  <div class="row noprint" style="margin-bottom:6px">
+    <span class="small">Vitesse de toutes les voix :</span>
+    <button type="button" data-rate="0.8">Lent</button>
+    <button type="button" data-rate="0.9">Un peu lent</button>
+    <button type="button" data-rate="1" class="on">Normal</button>
+    <button type="button" data-rate="1.15">Rapide</button>
+  </div>
+
+  <!-- Partie I -->
+  <div class="partie">
+    <h3>Partie I : le train</h3>
+    <div class="player">
+      <div class="ttl">Voix de synthèse, partie I (5 min 47)</div>
+      <audio controls preload="none" src="audio/2_partie_1.m4a"></audio>
+    </div>
+    <div class="mission"><b>En écoutant, cherche :</b> pourquoi Morin se jette-t-il sur la jeune femme ?</div>
+    <p><b>À toi :</b> raconte la partie I en 3 phrases. Qui ? Que se passe-t-il ? Comment ça finit ?</p>
+    <button type="button" data-reveal="r1">Vérifier avec le résumé</button>
+    <div class="reveal" id="r1">
+      <ol class="res">
+        <li>Un ami demande à <span class="p labarbe">Labarbe</span>, devenu député, pourquoi on dit toujours « ce cochon de Morin ». Labarbe raconte.</li>
+        <li>Vers 1862, <span class="p morin">Morin</span>, mercier à La Rochelle, passe 15 jours à Paris. Il revient très excité par les spectacles et les femmes.</li>
+        <li>À la gare, il remarque une belle jeune femme blonde. Il la suit dans un wagon vide du train de nuit.</li>
+        <li>Toute la nuit, elle dort. Lui rêve d'une aventure, mais n'ose rien faire.</li>
+        <li>À l'aube, elle se réveille et sourit. Morin croit que ce sourire est une invitation.</li>
+        <li>Il se jette sur elle et l'embrasse de force. Elle crie au secours et veut sauter du train.</li>
+        <li>Le train s'arrête à Mauzé. Un gendarme arrête Morin. Il sera poursuivi pour « outrage aux bonnes mœurs ».</li>
+      </ol>
+    </div>
+    <div class="q"><b>1. Où et quand se passe la scène ?</b><div class="a">Dans le train de nuit de Paris à La Rochelle, vers 1862, au lever du jour.</div><button type="button" data-ans>Réponse</button></div>
+    <div class="q"><b>2. Pourquoi Morin croit-il que la jeune femme est d'accord ?</b><div class="a">Elle lui sourit en se réveillant. Il croit que c'est une invitation, mais il se trompe.</div><button type="button" data-ans>Réponse</button></div>
+    <div class="q"><b>3. Qu'arrive-t-il à Morin à la fin de la partie I ?</b><div class="a">Un gendarme l'arrête en gare de Mauzé. Il est poursuivi en justice.</div><button type="button" data-ans>Réponse</button></div>
+  </div>
+
+  <!-- Partie II -->
+  <div class="partie">
+    <h3>Partie II : la mission</h3>
+    <div class="player">
+      <div class="ttl">Voix de synthèse, partie II (10 min 12)</div>
+      <audio controls preload="none" src="audio/3_partie_2.m4a"></audio>
+    </div>
+    <div class="mission"><b>En écoutant, cherche :</b> qui est la jeune femme, et que doit obtenir Labarbe ?</div>
+    <p><b>À toi :</b> raconte la partie II en 3 phrases.</p>
+    <button type="button" data-reveal="r2">Vérifier avec le résumé</button>
+    <div class="reveal" id="r2">
+      <ol class="res">
+        <li><span class="p labarbe">Labarbe</span> dirige le journal « Le Fanal des Charentes ». Le lendemain, <span class="p morin">Morin</span> vient le voir en pleurant : sa femme l'a battu, il a peur d'être ruiné.</li>
+        <li>La jeune femme s'appelle <span class="p henriette">Henriette Bonnel</span>. Elle n'a plus de parents et vient d'obtenir ses diplômes d'institutrice. Son <span class="p oncle">oncle</span> a porté plainte.</li>
+        <li>Le procureur abandonnera l'affaire si la plainte est retirée. Morin donne 1 000 francs à Labarbe pour arranger les choses.</li>
+        <li>Labarbe part à Mauzé avec <span class="p rivet">Rivet</span>, son collègue moqueur. L'oncle, <span class="p oncle">M. Tonnelet</span>, lit leur journal : il les accueille avec joie et les invite à dîner et à dormir.</li>
+        <li>Pendant une promenade, Labarbe parle seul avec Henriette. Elle dit : « Entre le désir et l'action, il y a place pour le respect. »</li>
+        <li>Labarbe l'embrasse de force, plusieurs fois. Elle se fâche. Il dit qu'il l'aime depuis un an, et elle finit par accepter un long baiser.</li>
+        <li><span class="p rivet">Rivet</span> les surprend et se moque : « C'est comme ça que tu arranges l'affaire de ce cochon de Morin ! »</li>
+      </ol>
+    </div>
+    <div class="q"><b>1. Qui est la jeune femme du train ?</b><div class="a">Henriette Bonnel : orpheline, elle vient d'avoir ses diplômes d'institutrice et passe ses vacances chez son oncle et sa tante, à Mauzé.</div><button type="button" data-ans>Réponse</button></div>
+    <div class="q"><b>2. Que doit obtenir Labarbe ?</b><div class="a">Que l'oncle retire sa plainte. Alors le procureur abandonne l'affaire.</div><button type="button" data-ans>Réponse</button></div>
+    <div class="q"><b>3. Pourquoi l'oncle accueille-t-il si bien Labarbe et Rivet ?</b><div class="a">Il est abonné à leur journal et partage leurs idées politiques. Il est ravi de recevoir les deux journalistes.</div><button type="button" data-ans>Réponse</button></div>
+  </div>
+
+  <!-- Partie III -->
+  <div class="partie">
+    <h3>Partie III : la nuit, et la fin</h3>
+    <div class="player">
+      <div class="ttl">Voix de synthèse, partie III (7 min 24)</div>
+      <audio controls preload="none" src="audio/4_partie_3.m4a"></audio>
+    </div>
+    <div class="mission"><b>En écoutant, cherche :</b> comment l'affaire se termine pour Morin… et pour Labarbe ?</div>
+    <p><b>À toi :</b> raconte la partie III en 3 phrases.</p>
+    <button type="button" data-reveal="r3">Vérifier avec le résumé</button>
+    <div class="reveal" id="r3">
+      <ol class="res">
+        <li>Au dîner, puis au clair de lune, <span class="p labarbe">Labarbe</span> continue de séduire <span class="p henriette">Henriette</span>.</li>
+        <li>La tante envoie une dépêche : elle ne rentrera que le lendemain matin.</li>
+        <li>La nuit, Labarbe entre dans la chambre d'Henriette. Elle se débat d'abord. Puis le texte laisse comprendre qu'ils passent la nuit ensemble : c'est l'image du « livre ».</li>
+        <li>Le matin, la tante arrive. La famille retire sa plainte. Labarbe laisse 500 francs aux pauvres.</li>
+        <li>À La Rochelle, Labarbe annonce à <span class="p morin">Morin</span> : « C'est arrangé. » Mais pour tout le monde, Morin reste « ce cochon de Morin ». On se moque de lui partout. Il meurt deux ans plus tard.</li>
+        <li>En 1875, Labarbe, candidat pour devenir député, rend visite à un notaire. Sa femme, c'est Henriette ! Le <span class="p notaire">mari</span> remercie Labarbe pour son « tact » dans « l'affaire de ce cochon de Morin ».</li>
+      </ol>
+    </div>
+    <div class="q"><b>1. Comment l'affaire se termine-t-elle pour Morin ?</b><div class="a">La plainte est retirée, donc pas de procès. Mais tout le monde l'appelle « ce cochon de Morin » et se moque de lui. Il meurt deux ans plus tard.</div><button type="button" data-ans>Réponse</button></div>
+    <div class="q"><b>2. Que devient Henriette ?</b><div class="a">En 1875, elle est mariée à Me Belloncle, le notaire de Tousserre.</div><button type="button" data-ans>Réponse</button></div>
+    <div class="q"><b>3. Pour quoi le mari d'Henriette remercie-t-il Labarbe ?</b><div class="a">Pour son « tact » et sa délicatesse dans l'affaire. C'est ironique : Labarbe a fait bien pire que Morin.</div><button type="button" data-ans>Réponse</button></div>
+  </div>
+
+  <div class="player" style="margin-top:22px">
+    <div class="ttl">Le résumé complet, pour réviser (3 min)</div>
+    <audio controls preload="none" src="audio/5_resume_pour_reviser.m4a"></audio>
+  </div>
+</section>
+
+<!-- ============ 3. SCHÉMA ============ -->
+<section class="fiche" id="schema">
+  <span class="tag">Fiche 3</span>
+  <h2>Le schéma de l'histoire</h2>
+  <p class="small">Conseil : d'abord, Ethan essaie de dire chaque case de mémoire. Ensuite, il regarde.</p>
+  <div class="schema">
+    <div class="step"><b>Situation initiale</b><span class="p morin">Morin</span>, mercier de La Rochelle, rentre de 15 jours à Paris, tout excité.</div>
+    <div class="arrow">↓</div>
+    <div class="step"><b>Élément déclencheur</b>Dans le train, il se jette sur une jeune femme pour l'embrasser. Il est arrêté à Mauzé.</div>
+    <div class="arrow">↓</div>
+    <div class="step"><b>Péripéties</b>L'oncle a porté plainte. <span class="p labarbe">Labarbe</span> et <span class="p rivet">Rivet</span> vont chez lui pour la faire retirer. Labarbe séduit <span class="p henriette">Henriette</span>, souvent de force, et passe la nuit avec elle.</div>
+    <div class="arrow">↓</div>
+    <div class="step"><b>Dénouement</b>La tante arrive : la famille retire sa plainte.</div>
+    <div class="arrow">↓</div>
+    <div class="step"><b>Situation finale</b>Morin évite le procès mais reste « ce cochon de Morin » ; il meurt 2 ans après. Labarbe devient député, et Henriette, mariée, le remercie… de son « tact ».</div>
+  </div>
+
+  <h3>La frise du temps</h3>
+  <ol class="frise">
+    <li><span class="d">1862 ou 1863, le soir.</span> Morin prend le train de nuit à Paris.</li>
+    <li><span class="d">Le matin.</span> Le sourire, le baiser forcé, l'arrestation à Mauzé.</li>
+    <li><span class="d">Le lendemain.</span> Morin chez Labarbe. Visite au procureur. Morin donne 1 000 francs. Labarbe et Rivet partent à Mauzé : promenade, dîner, nuit.</li>
+    <li><span class="d">Le surlendemain matin.</span> 7 h : Henriette apporte le chocolat. 8 h : la tante arrive, la plainte est retirée. Retour à La Rochelle : « C'est arrangé. »</li>
+    <li><span class="d">2 ans plus tard.</span> Morin meurt.</li>
+    <li><span class="d">1875.</span> Labarbe, candidat député, retrouve Henriette, épouse du notaire Belloncle.</li>
+    <li><span class="d">« Aujourd'hui ».</span> Labarbe, député, raconte l'histoire à son ami.</li>
+  </ol>
+</section>
+
+<!-- ============ 4. COMPRENDRE ============ -->
+<section class="fiche" id="comprendre">
+  <span class="tag">Fiche 4</span>
+  <h2>Ce qu'il faut comprendre</h2>
+
+  <h3>1. Un récit dans le récit</h3>
+  <p>Un ami (« je ») pose une question, puis <span class="p labarbe">Labarbe</span> raconte. On appelle ça un <b>récit enchâssé</b>. Donc on n'a que la version de Labarbe, et il se donne le beau rôle.</p>
+
+  <h3>2. Le refrain</h3>
+  <p>« Ce cochon de Morin » revient <b>12 fois</b> dans le texte, et « l'affaire de ce cochon de Morin » 7 fois, souvent dans la bouche de <span class="p rivet">Rivet</span>. Rivet le dit pour se moquer de Labarbe : l'« affaire de Morin » est devenue l'affaire de Labarbe.</p>
+
+  <h3>3. L'ironie : qui est le vrai cochon ?</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th></th><th><span class="p morin">Morin</span></th><th><span class="p labarbe">Labarbe</span></th></tr>
+    <tr><td><b>Ce qu'il fait</b></td><td>Un baiser forcé dans le train.</td><td>Des baisers forcés, puis il entre la nuit dans la chambre d'Henriette.</td></tr>
+    <tr><td><b>Ce qui lui arrive</b></td><td>Arrêté, moqué partout, surnommé « cochon ». Il meurt 2 ans après.</td><td>Remercié pour son « tact ». Il devient député.</td></tr>
+    <tr><td><b>Pourquoi cette différence ?</b></td><td>Il est maladroit, « bête » et « laid », selon Henriette.</td><td>Il est « le beau Labarbe », malin, et chef du journal.</td></tr>
+  </table>
+  </div>
+  <p>Maupassant ne dit jamais « Labarbe est pire que Morin ». Il laisse le lecteur le comprendre. C'est ça, <b>l'ironie</b>.</p>
+
+  <h3>4. Pour en parler ensemble</h3>
+  <div class="mission">Henriette dit : « Entre le désir et l'action, il y a place pour le respect. » Est-ce que Morin respecte cette phrase ? Et Labarbe ?</div>
+  <p class="small">Il n'y a pas de réponse à apprendre par cœur : l'idée est qu'Ethan donne son avis à l'oral, avec un exemple du texte. Aujourd'hui, embrasser quelqu'un de force est une agression sexuelle, punie par la loi.</p>
+</section>
+
+<!-- ============ 5. SE TESTER ============ -->
+<section class="fiche" id="reviser">
+  <span class="tag">Fiche 5</span>
+  <h2>Se tester (sans regarder le texte)</h2>
+  <p>Ethan répond <b>à voix haute, de mémoire</b>. Une réponse fausse, ce n'est pas grave : chercher dans sa mémoire, c'est ce qui fait retenir. Ensuite, on regarde la réponse.</p>
+
+  <h3>Série J+2 (2 jours après la lecture)</h3>
+  <label class="check noprint"><input type="checkbox" data-store="j2"> Série J+2 faite</label>
+  <div class="q"><b>Quel est le métier de Morin ?</b><div class="a">Mercier : il vend du fil, des boutons, des rubans, à La Rochelle.</div><button type="button" data-ans>Réponse</button></div>
+  <div class="q"><b>Qui raconte l'histoire de Morin ?</b><div class="a">Labarbe, devenu député, à un ami de La Rochelle.</div><button type="button" data-ans>Réponse</button></div>
+  <div class="q"><b>Comment s'appelle le collègue de Labarbe ?</b><div class="a">Rivet.</div><button type="button" data-ans>Réponse</button></div>
+  <div class="q"><b>Dans quelle ville Morin est-il arrêté ?</b><div class="a">À Mauzé, en gare.</div><button type="button" data-ans>Réponse</button></div>
+  <div class="q"><b>Qui a porté plainte contre Morin ?</b><div class="a">L'oncle d'Henriette, M. Tonnelet.</div><button type="button" data-ans>Réponse</button></div>
+  <div class="q"><b>Quelle phrase Rivet répète-t-il tout le temps ?</b><div class="a">« L'affaire de ce cochon de Morin. »</div><button type="button" data-ans>Réponse</button></div>
+  <div class="q"><b>Combien d'argent Morin donne-t-il à Labarbe ? Combien va aux pauvres ?</b><div class="a">1 000 francs donnés par Morin. 500 francs laissés aux pauvres.</div><button type="button" data-ans>Réponse</button></div>
+  <div class="q"><b>Que veut dire « porter plainte » ?</b><div class="a">Demander à la justice de punir quelqu'un.</div><button type="button" data-ans>Réponse</button></div>
+
+  <h3>Série J+7 (une semaine après)</h3>
+  <label class="check noprint"><input type="checkbox" data-store="j7"> Série J+7 faite</label>
+  <div class="q"><b>Remets dans l'ordre, à l'oral : le dîner chez l'oncle · la visite au notaire · le sourire dans le train · la plainte retirée · l'arrestation à Mauzé.</b><div class="a">Le sourire dans le train → l'arrestation à Mauzé → le dîner chez l'oncle → la plainte retirée → la visite au notaire.</div><button type="button" data-ans>Réponse</button></div>
+  <div class="q"><b>Qui est M. Tonnelet ?</b><div class="a">L'oncle d'Henriette, à Mauzé. Il est abonné au journal de Labarbe.</div><button type="button" data-ans>Réponse</button></div>
+  <div class="q"><b>Pourquoi Labarbe dit-il à Henriette qu'il l'aime depuis un an ?</b><div class="a">Pour se faire pardonner après l'avoir embrassée de force : il cherchait une excuse. Lui-même dit : « je crois même que j'étais sincère ».</div><button type="button" data-ans>Réponse</button></div>
+  <div class="q"><b>Que veut dire « tact » ? Pourquoi est-ce drôle à la fin ?</b><div class="a">La délicatesse. C'est ironique : on remercie Labarbe pour sa délicatesse, alors qu'il a fait pire que Morin.</div><button type="button" data-ans>Réponse</button></div>
+  <div class="q"><b>Explique le titre en 2 phrases.</b><div class="a">Tout le monde appelle Morin « ce cochon de Morin » à cause du baiser forcé. Mais en lisant, on comprend que le vrai « cochon » est peut-être Labarbe.</div><button type="button" data-ans>Réponse</button></div>
+  <div class="q"><b>Qui raconte au tout début, et pourquoi c'est important ?</b><div class="a">Un ami (« je ») pose la question, puis Labarbe raconte : c'est un récit enchâssé. On n'a que la version de Labarbe.</div><button type="button" data-ans>Réponse</button></div>
+  <div class="q"><b>En quelle année se passe la dernière scène ?</b><div class="a">En 1875, quand Labarbe est candidat député.</div><button type="button" data-ans>Réponse</button></div>
+
+  <h3>Veille du contrôle</h3>
+  <label class="check noprint"><input type="checkbox" data-store="veille"> Révision de la veille faite</label>
+  <p>1. Raconter toute l'histoire en 2 minutes, avec la frise (fiche 3) sous les yeux, puis sans. 2. Cinq questions au hasard :</p>
+  <div class="player noprint">
+    <div id="flash">Clique sur « Question au hasard ».</div>
+    <div class="a" id="flashA" style="display:none;color:var(--ok)"></div>
+    <div class="row">
+      <button type="button" id="flashNext">Question au hasard</button>
+      <button type="button" id="flashShow">Voir la réponse</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. RACONTER ============ -->
+<section class="fiche" id="raconter">
+  <span class="tag">Fiche 6</span>
+  <h2>Raconter l'histoire à l'oral</h2>
+  <p>Ethan raconte toute l'histoire en suivant ces 6 étapes. Astuce : l'enregistrer avec le téléphone (Dictaphone), puis réécouter ensemble.</p>
+  <div class="schema">
+    <div class="step"><b>1. Qui ?</b>Morin, Labarbe, Henriette, Rivet, l'oncle.</div>
+    <div class="step"><b>2. Où et quand ?</b>Entre Paris, Mauzé et La Rochelle, vers 1862.</div>
+    <div class="step"><b>3. Le problème</b>Ce que Morin a fait dans le train, et ce qui lui arrive.</div>
+    <div class="step"><b>4. Ce qu'ils font pour le régler</b>La mission de Labarbe et Rivet chez l'oncle.</div>
+    <div class="step"><b>5. Comment ça finit</b>Pour Morin, puis pour Labarbe (1875).</div>
+    <div class="step"><b>6. Ce que j'en pense</b>Qui est le vrai cochon, et pourquoi ?</div>
+  </div>
+</section>
+
+<p class="small">Texte : Project Gutenberg, ebook n° 11714 (domaine public). Lecture humaine : LibriVox, par Didier (domaine public). Voix de synthèse : voix « Thomas » de macOS.</p>
+</main>
+
+<script>
+(function () {
+  var store = {
+    get: function (k) { try { return localStorage.getItem('morin_' + k); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem('morin_' + k, v); } catch (e) {} }
+  };
+
+  // Réponses une par une
+  document.querySelectorAll('[data-ans]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var q = b.closest('.q'); q.classList.toggle('show');
+      b.textContent = q.classList.contains('show') ? 'Cacher' : 'Réponse';
+    });
+  });
+  // Résumés
+  document.querySelectorAll('[data-reveal]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var r = document.getElementById(b.getAttribute('data-reveal'));
+      r.classList.toggle('show');
+      b.textContent = r.classList.contains('show') ? 'Cacher le résumé' : 'Vérifier avec le résumé';
+    });
+  });
+  // Toutes les réponses (parent)
+  var all = document.getElementById('allAns');
+  all.addEventListener('click', function () {
+    document.body.classList.toggle('allans');
+    all.textContent = document.body.classList.contains('allans') ? 'Cacher toutes les réponses' : 'Afficher toutes les réponses (pour vous)';
+  });
+
+  // Vitesse
+  var rate = parseFloat(store.get('rate')) || 1;
+  function applyRate() {
+    document.querySelectorAll('audio').forEach(function (a) { a.playbackRate = rate; a.defaultPlaybackRate = rate; });
+    document.querySelectorAll('[data-rate]').forEach(function (b) { b.classList.toggle('on', parseFloat(b.getAttribute('data-rate')) === rate); });
+  }
+  document.querySelectorAll('[data-rate]').forEach(function (b) {
+    b.addEventListener('click', function () { rate = parseFloat(b.getAttribute('data-rate')); store.set('rate', rate); applyRate(); });
+  });
+  document.querySelectorAll('audio').forEach(function (a) {
+    a.addEventListener('play', function () {
+      a.playbackRate = rate;
+      document.querySelectorAll('audio').forEach(function (o) { if (o !== a) o.pause(); });
+    });
+  });
+  applyRate();
+
+  // Sauts dans la lecture humaine
+  var human = document.getElementById('human');
+  document.querySelectorAll('[data-seek]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = parseFloat(b.getAttribute('data-seek'));
+      var go = function () { human.currentTime = t; human.play(); };
+      if (human.readyState >= 1) go();
+      else { human.preload = 'auto'; human.addEventListener('loadedmetadata', go, { once: true }); human.load(); }
+    });
+  });
+
+  // Cases à cocher mémorisées
+  document.querySelectorAll('[data-store]').forEach(function (c) {
+    var k = c.getAttribute('data-store');
+    c.checked = store.get(k) === '1';
+    c.addEventListener('change', function () { store.set(k, c.checked ? '1' : '0'); });
+  });
+
+  // Question au hasard (toutes les questions de la page)
+  var qs = Array.prototype.map.call(document.querySelectorAll('.q'), function (q) {
+    return { q: q.querySelector('b').textContent, a: q.querySelector('.a').textContent };
+  });
+  var cur = -1, flash = document.getElementById('flash'), flashA = document.getElementById('flashA');
+  document.getElementById('flashNext').addEventListener('click', function () {
+    var n; do { n = Math.floor(Math.random() * qs.length); } while (qs.length > 1 && n === cur);
+    cur = n; flash.textContent = qs[n].q; flashA.textContent = qs[n].a; flashA.style.display = 'none';
+  });
+  document.getElementById('flashShow').addEventListener('click', function () {
+    if (cur >= 0) flashA.style.display = 'block';
+  });
+})();
+</script>
+</body>
+</html>
